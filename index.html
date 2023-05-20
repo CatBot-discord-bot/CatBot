@@ -1,0 +1,69 @@
+<!doctype Html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cat-Bot Website</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="navbar">
+        <a href="./index.html">Home!</a>
+        <a href="./login.html">Invite Cat-Bot</a>
+        <a href="./access.html">Login</a>
+        <a href="./commands.html">Commands</a>
+        <a href="mailto://andrewisabnormal@gmail.com">Support</a>
+		<img src='' id="avatar"/>
+		<div id="name"></div>
+    </div>
+    <div class="header">
+        <h1>Welcome to Cat-Bot!</h1>
+        <h3>The bot for all of your needs</h3>
+        <button style="height:60px;width:120px;font-size: 20px;color:rgba(75, 45, 78, 0.418)" onclick="window.location.href = 'https://discord.com/oauth2/authorize?client_id=1050289486124306452&permissions=8&redirect_uri=https%3A%2F%2Fcat-bot-discord-bot.netlify.app&response_type=code&scope=identify%20bot%20guilds%20applications.commands';">Invite now</button>
+    </div>
+    <div class="otherside">
+        <h1>Easily Set up him</h1>
+        <h2>Just drag his role to the very top and you are good!</h2>
+        <video width="320" height="240" controls>
+            <source src="./src/tut1.mkv" type="video/mp4">
+          Your browser does not support the video tag.
+          </video>
+    </div>
+    <div class="otherside2">
+        <h1 style="color: white;float: none;">Used and trusted in over 50 servers!</h1>
+        <h3 style="color: white;float: none;">Thank you for the support! We continue updating our bot for more servers!</h2>
+    </div>
+    <div class="footer">
+        <h1>Cat-Bot</h1>
+        <img src="./src/mao.jpg">
+
+    </div>
+    <script>
+        window.onload = () => {
+            const fragment = new URLSearchParams(window.location.hash.slice(1));
+            const [accessToken, tokenType] = [fragment.get('access_token'), fragment.get('token_type')];
+
+			if (!accessToken) {
+				window.location.href('/')
+			}
+
+			fetch('https://discord.com/api/users/@me', {
+			headers: {
+				authorization: `${tokenType} ${accessToken}`,
+			},
+			})
+			.then(result => result.json())
+			.then(response => {
+				console.log(response);
+				const { username, discriminator, avatar, id} = response;
+				//set the welcome username string
+				document.getElementById('name').innerText = ` ${username}#${discriminator}`;
+
+				//set the avatar image by constructing a url to access discord's cdn
+				document.getElementById("avatar").src = `https://cdn.discordapp.com/avatars/${id}/${avatar}.jpg`;
+			})
+			.catch(console.error);
+
+		};
+    </script>
+</body>
